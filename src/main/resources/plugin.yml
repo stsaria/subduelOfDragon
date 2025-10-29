@@ -1,0 +1,23 @@
+name: subduelOfDragon
+version: '1.0'
+main: si.f5.stsaria.subduelOfDragon.SubDuelOfDragon
+api-version: '1.21'
+author: stsaria
+website: https://github.com/stsaria/subduelOfDragon
+
+commands:
+  up:
+    description: Upgrade Equipment
+    permission: subduer
+  copy:
+    description: Copy item
+    permission: subduer
+  set:
+    description: Set configure for adjustment game balance
+permissions:
+  subduer:
+    description: Subduer of Dragon
+    default: true
+  admin:
+    description: Admin
+    default: op
