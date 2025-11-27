@@ -10,8 +10,10 @@ import si.f5.stsaria.subduelOfDragon.manager.UpgradeManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Saver {
     private static File f = null;

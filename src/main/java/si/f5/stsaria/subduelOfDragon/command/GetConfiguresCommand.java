@@ -8,7 +8,6 @@ import si.f5.stsaria.subduelOfDragon.Settings;
 import si.f5.stsaria.subduelOfDragon.util.Messager;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class GetConfiguresCommand implements CommandExecutor {
     @Override
