@@ -5,9 +5,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import si.f5.stsaria.subduelOfDragon.Saver;
+import si.f5.stsaria.subduelOfDragon.Settings;
 import si.f5.stsaria.subduelOfDragon.util.Messager;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class GetSavesCommand implements CommandExecutor {
     @Override

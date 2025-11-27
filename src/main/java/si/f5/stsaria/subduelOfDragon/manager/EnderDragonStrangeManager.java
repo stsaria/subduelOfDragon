@@ -6,7 +6,9 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.world.ChunkLoadEvent;
 import si.f5.stsaria.subduelOfDragon.Settings;
+import si.f5.stsaria.subduelOfDragon.SubDuelOfDragon;
 
 import java.util.Objects;
 

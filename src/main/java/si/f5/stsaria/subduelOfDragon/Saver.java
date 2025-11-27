@@ -10,10 +10,8 @@ import si.f5.stsaria.subduelOfDragon.manager.UpgradeManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Type;
+import java.util.*;
 
 public class Saver {
     private static File f = null;
@@ -23,9 +21,7 @@ public class Saver {
         map.forEach(
             (key, value) -> {
                 newMap.put(key, new ArrayList<>());
-                ((List<T>) value).forEach(i -> {
-                    newMap.get(key).add(i);
-                });
+                ((List<T>) value).forEach(i -> newMap.get(key).add(i));
             }
         );
         return newMap;
