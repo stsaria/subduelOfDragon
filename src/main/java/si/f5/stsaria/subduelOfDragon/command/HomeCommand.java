@@ -9,33 +9,38 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import si.f5.stsaria.subduelOfDragon.Settings;
 import si.f5.stsaria.subduelOfDragon.SubDuelOfDragon;
-import si.f5.stsaria.subduelOfDragon.manager.HomeManager;
-import si.f5.stsaria.subduelOfDragon.manager.StandByDimensionManager;
+import si.f5.stsaria.subduelOfDragon.manager.HomesManager;
+import si.f5.stsaria.subduelOfDragon.manager.DimensionManager;
 
 public class HomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) return true;
-        Location home = HomeManager.getHomeLocation(player);
+        Location home = HomesManager.getHomeLocation(player);
         if (home == null){
             player.sendMessage(Settings.get("messageCantTeleportHome"));
             return true;
         }
-        HomeManager.startTeleportStandBy(player);
+        HomesManager.startTeleportStandBy(player);
         player.sendMessage(Settings.get("messageStartedTeleport"));
-        Bukkit.getScheduler().scheduleSyncDelayedTask(SubDuelOfDragon.getInstance(), () -> {
-            float loopDelay = 0.05F;
+        new Thread(() -> {
+            float loopDelay = 0.1F;
             for (int i = 0; i < ((float) Settings.getInt("homeStandByDelay"))/loopDelay; i++) {
-                if (!HomeManager.isStartedTeleportStandBy(player)) {
+                if (!HomesManager.isStartedTeleportStandBy(player)) {
                     player.sendMessage(Settings.get("messageCanceledTeleportHome"));
                     return;
                 }
+                try {
+                    Thread.sleep((long) (1000*loopDelay));
+                } catch (InterruptedException e) {return;}
             }
-            player.teleport(home);
-            StandByDimensionManager.removeStandByPlayer(player);
-            HomeManager.stopTeleportStandBy(player);
-            player.sendMessage(Settings.get("messageTeleportedHome"));
-        });
+            Bukkit.getScheduler().runTask(SubDuelOfDragon.getInstance(), () -> {
+                player.teleport(home);
+                DimensionManager.removeStandByPlayer(player);
+                HomesManager.stopTeleportStandBy(player);
+                player.sendMessage(Settings.get("messageTeleportedHome"));
+            });
+        }).start();
         return true;
     }
 }

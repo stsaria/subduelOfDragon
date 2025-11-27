@@ -2,6 +2,7 @@ package si.f5.stsaria.subduelOfDragon.manager;
 
 import org.bukkit.entity.Player;
 import si.f5.stsaria.subduelOfDragon.CoolDownType;
+import si.f5.stsaria.subduelOfDragon.Settings;
 import si.f5.stsaria.subduelOfDragon.model.CoolDown;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class CoolDownManager {
         for (CoolDown coolDown : coolDowns) {
             if (
                 coolDown.getPlayer().equals(player) &&
-                (coolDown.getExpireTime() < getEpoch() ||
-                coolDownType.equals(coolDown.getType()))
+                coolDownType.equals(coolDown.getType()) &&
+                coolDown.getExpireTime() > getEpoch()
             ) return false;
         }
         return true;
@@ -26,7 +27,7 @@ public class CoolDownManager {
         if (!canAction(player, type)){
             return false;
         }
-        coolDowns.add(new CoolDown(type, getEpoch(), player));
+        coolDowns.add(new CoolDown(type, getEpoch()+Settings.getInt(type.name().toLowerCase()+"CoolDown"), player));
         return true;
     }
 }

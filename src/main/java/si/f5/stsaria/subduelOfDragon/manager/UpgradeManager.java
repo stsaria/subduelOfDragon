@@ -8,8 +8,11 @@ import si.f5.stsaria.subduelOfDragon.Settings;
 import si.f5.stsaria.subduelOfDragon.model.FoundEquipment;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 class FoundEquipments {
     public static FoundEquipment pickaxe = null;
@@ -42,6 +45,7 @@ class FoundEquipments {
 }
 
 public class UpgradeManager {
+    private static final List<String> equipTypes = List.of("pickaxe", "axe", "shovel", "sword", "hoe", "helmet", "chestplate", "leggings", "boots");
     private static final List<String> ranks = List.of("wooden", "stone", "iron", "diamond", "netherite");
 
     private static String getRankByName(String name) {
@@ -69,10 +73,11 @@ public class UpgradeManager {
             if (upgradedMaterial == null) return null;
             ItemStack upgraded = new ItemStack(upgradedMaterial);
             ItemMeta meta = Objects.requireNonNull(upgraded.getItemMeta());
+            String itemName = meta.getItemName().isEmpty() ? materialName : meta.getItemName();
             meta.setDisplayName(
                 Settings.get("upgradedItemDiscovererSig")
-                .replace("<name>", nowEquip.getPlayer().getName())
-                .replace("<item>", meta.getDisplayName())
+                .replace("<name>", nowEquip.getPlayerName())
+                .replace("<item>", itemName)
             );
             upgraded.setItemMeta(meta);
             return upgraded;
@@ -85,12 +90,28 @@ public class UpgradeManager {
         String rank = getRankByName(materialName);
         if (rank == null) return;
         String equipType = materialName.replace(rank +"_", "");
-
         FoundEquipment nowEquip = FoundEquipments.get(equipType);
-        if (nowEquip == null) return;
-        String nowEquipRank = getRankByName(nowEquip.getMaterial().name().toLowerCase());
-        if (ranks.indexOf(nowEquipRank) >= ranks.indexOf(rank)) return;
-        FoundEquipment equip = new FoundEquipment(player, material);
+        if (nowEquip != null) {
+            String nowEquipRank = getRankByName(nowEquip.getMaterial().name().toLowerCase());
+            if (ranks.indexOf(nowEquipRank) >= ranks.indexOf(rank)) return;
+        }
+        FoundEquipment equip = new FoundEquipment(player.getName(), material);
         FoundEquipments.set(equipType, equip);
+    }
+
+    public static Map<String, List<String>> getEquips() {
+        Map<String, List<String>> equips = new HashMap<>();
+        for (String equipType : equipTypes){
+            FoundEquipment equip = FoundEquipments.get(equipType);
+            if (equip == null) continue;
+            equips.put(equipType, List.of(equip.getMaterial().name(), equip.getPlayerName()));
+        }
+        return equips;
+    }
+
+    public static void setEquips(Map<String, List<String>> equips) {
+        equips.forEach((equipType, playerAndEquip) ->
+            FoundEquipments.set(equipType, new FoundEquipment(playerAndEquip.get(1), Material.getMaterial(playerAndEquip.getFirst())))
+        );
     }
 }

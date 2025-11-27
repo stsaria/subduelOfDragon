@@ -12,8 +12,24 @@ commands:
   copy:
     description: Copy item
     permission: subduer
-  set:
+  setcon:
     description: Set configure for adjustment game balance
+    permission: admin
+  getcons:
+    description: Get configures
+    permission: subduer
+  sethome:
+    description: Set player home for teleport
+    permission: subduer
+  home:
+    description: teleport home
+    permission: subduer
+  getsaves:
+    description: Get saves
+    permission: admin
+  savedragon:
+    description: Save config and save data's
+    permission: admin
 permissions:
   subduer:
     description: Subduer of Dragon
