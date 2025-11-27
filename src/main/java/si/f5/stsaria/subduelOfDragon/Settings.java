@@ -4,8 +4,8 @@ import org.apache.commons.io.FileUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.io.*;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
 
 public class Settings {
     private static FileConfiguration config = null;

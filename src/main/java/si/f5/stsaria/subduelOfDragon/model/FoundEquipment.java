@@ -1,7 +1,6 @@
 package si.f5.stsaria.subduelOfDragon.model;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 public class FoundEquipment {
     private final String playerName;

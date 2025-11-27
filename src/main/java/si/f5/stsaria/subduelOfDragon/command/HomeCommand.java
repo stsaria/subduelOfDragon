@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import si.f5.stsaria.subduelOfDragon.Settings;
 import si.f5.stsaria.subduelOfDragon.SubDuelOfDragon;
-import si.f5.stsaria.subduelOfDragon.manager.HomesManager;
 import si.f5.stsaria.subduelOfDragon.manager.DimensionManager;
+import si.f5.stsaria.subduelOfDragon.manager.HomesManager;
 
 public class HomeCommand implements CommandExecutor {
     @Override
