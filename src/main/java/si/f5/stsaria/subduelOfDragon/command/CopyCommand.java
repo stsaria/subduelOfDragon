@@ -17,14 +17,20 @@ public class CopyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) return true;
-        if (!CoolDownManager.action(player, CoolDownType.COPY)) {
-            player.sendMessage(Settings.get("messageCantCopyCoolDown"));
-            return true;
-        }
         PlayerInventory inventory = player.getInventory();
         ItemStack item = inventory.getItemInMainHand();
         if (item.getType().equals(Material.AIR)) {
-            player.sendMessage(Settings.get("messageCantCopyAir"));
+            Messager.sendMessage(player, Settings.get("messageCantCopyAir"));
+            return true;
+        }
+        long remainingTime = CoolDownManager.action(player, CoolDownType.COPY);
+        if (remainingTime > 0) {
+            Messager.sendMessage(
+                player,
+                Settings.get("messageCantCopyCoolDown")
+                .replace("<cooldown>", String.valueOf(remainingTime))
+            );
+            return true;
         }
         inventory.addItem(item);
         Messager.sendMessage(player, Settings.get("messageCopied"));

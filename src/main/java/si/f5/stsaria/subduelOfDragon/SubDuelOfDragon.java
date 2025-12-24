@@ -11,21 +11,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import si.f5.stsaria.subduelOfDragon.command.*;
-import si.f5.stsaria.subduelOfDragon.manager.DimensionManager;
-import si.f5.stsaria.subduelOfDragon.manager.EnderDragonStrangeManager;
-import si.f5.stsaria.subduelOfDragon.manager.HomesManager;
-import si.f5.stsaria.subduelOfDragon.manager.UpgradeManager;
+import si.f5.stsaria.subduelOfDragon.manager.*;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -55,8 +49,16 @@ public final class SubDuelOfDragon extends JavaPlugin implements Listener {
         Objects.requireNonNull(this.getCommand("getcons")).setExecutor(new GetConfiguresCommand());
         Objects.requireNonNull(this.getCommand("getsaves")).setExecutor(new GetSavesCommand());
         Objects.requireNonNull(this.getCommand("savedragon")).setExecutor(new SaveCommand());
+        Objects.requireNonNull(this.getCommand("ok")).setExecutor(new OkCommand());
         this.getServer().getPluginManager().registerEvents(this, this);
         Bukkit.getScheduler().runTaskLater(this, EnderDragonStrangeManager::updateEnderDragonStrange, 6*20);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                CoolDownManager.gcCoolDowns();  
+            }
+        }.runTaskTimer(this, 20L, 20L);
     }
 
     public void save(){
@@ -72,6 +74,7 @@ public final class SubDuelOfDragon extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
+        HelpScoreBoard.show(e.getPlayer());
         EnderDragonStrangeManager.updateEnderDragonStrange();
     }
 
@@ -80,15 +83,17 @@ public final class SubDuelOfDragon extends JavaPlugin implements Listener {
         Location f, t;
         f = e.getFrom();
         t = Objects.requireNonNull(e.getTo());
-        if (List.of(f.getX(), f.getY(), f.getZ()).equals(List.of(t.getX(), t.getY(), t.getZ()))) {
-            return;
-        }
+        if (f.getX() == t.getX() && f.getY() == t.getY() && f.getZ() == t.getZ()) return;
         HomesManager.cancelEvent(e.getPlayer());
+        if (f.getBlockX() != t.getBlockX() || f.getBlockY() != t.getBlockY() || f.getBlockZ() != t.getBlockZ()){
+            CoordViewer.view(e.getPlayer());
+        }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e){
         HomesManager.cancelEvent(e.getPlayer());
+        ShortSleeper.bedOut(e.getPlayer());
     }
 
     @EventHandler
@@ -123,5 +128,10 @@ public final class SubDuelOfDragon extends JavaPlugin implements Listener {
     @EventHandler
     public void onWorldSave(WorldSaveEvent event) {
         this.save();
+    }
+
+    @EventHandler
+    public void onPlayerEnterBed(PlayerBedEnterEvent e){
+        ShortSleeper.bedIn(e);
     }
 }

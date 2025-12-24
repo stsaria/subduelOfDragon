@@ -1,5 +1,5 @@
 name: subduelOfDragon
-version: '1.0'
+version: '1.1'
 main: si.f5.stsaria.subduelOfDragon.SubDuelOfDragon
 api-version: '1.21'
 author: stsaria
@@ -28,8 +28,11 @@ commands:
     description: Get saves
     permission: admin
   savedragon:
-    description: Save config and save data's
+    description: Save config and save data
     permission: admin
+  ok:
+    description: OK with teleporting there and setting the spawn point
+    permission: subduer
 permissions:
   subduer:
     description: Subduer of Dragon

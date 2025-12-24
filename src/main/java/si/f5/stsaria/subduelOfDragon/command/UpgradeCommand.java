@@ -18,8 +18,13 @@ public class UpgradeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) return true;
-        if (!CoolDownManager.action(player, CoolDownType.UPGRADE)) {
-            player.sendMessage(Settings.get("messageCantUpgrade"));
+        long remainingTime = CoolDownManager.action(player, CoolDownType.UPGRADE);
+        if (remainingTime > 0) {
+            Messager.sendMessage(
+                player,
+                Settings.get("messageCantUpgradeCoolDown")
+                .replace("<cooldown>", String.valueOf(remainingTime))
+            );
             return true;
         }
         Inventory inventory = player.getInventory();

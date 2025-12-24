@@ -5,11 +5,11 @@ import si.f5.stsaria.subduelOfDragon.CoolDownType;
 
 public class CoolDown {
     private final CoolDownType type;
-    private final long expireTime;
+    private final long timestamp;
     private final Player player;
-    public CoolDown(CoolDownType type, long expireTime, Player player) {
+    public CoolDown(CoolDownType type, long timestamp, Player player) {
         this.type = type;
-        this.expireTime = expireTime;
+        this.timestamp = timestamp;
         this.player = player;
     }
 
@@ -17,8 +17,8 @@ public class CoolDown {
         return type;
     }
 
-    public long getExpireTime() {
-        return expireTime;
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public Player getPlayer() {

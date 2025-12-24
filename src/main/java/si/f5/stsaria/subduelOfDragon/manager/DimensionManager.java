@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 import si.f5.stsaria.subduelOfDragon.Settings;
+import si.f5.stsaria.subduelOfDragon.util.Messager;
+import si.f5.stsaria.subduelOfDragon.util.WorldSearcher;
 
 import java.util.*;
 
@@ -14,41 +16,46 @@ public class DimensionManager {
     private static final Set<String> standByPlayerNames = new HashSet<>();
 
     private static final List<World.Environment> lockedWorlds = new ArrayList<>(List.of(World.Environment.NETHER, World.Environment.THE_END));
-    private static synchronized void unlock(Location l){
-        standByPlayerNames.forEach(pN -> {
-            Player p = Bukkit.getPlayer(pN);
-            if (p == null) return;
-            p.sendMessage(Settings.get("titleUnlockedDimension"));
-        });
+    private static void unlock(Location gateLocation, Location toLocation){
         standByPlayerNames.clear();
-        lockedWorlds.remove(Objects.requireNonNull(l.getWorld()).getEnvironment());
-    }
-    private static synchronized void sendMessages(String message){
-        standByPlayerNames.forEach(pN -> {
-            Player p = Bukkit.getPlayer(pN);
-            if (p == null) return;
-            p.sendMessage(message);
-        });
+        lockedWorlds.remove(Objects.requireNonNull(toLocation.getWorld()).getEnvironment());
+
+        Location teleportLocation = Objects.requireNonNull(
+            WorldSearcher.getSafeGroundByAroundXAndZ(Objects.requireNonNull(gateLocation.getWorld()), gateLocation.getBlockX(), gateLocation.getBlockZ())
+        );
+
+        OkTeleportManager.setTeleportLocation(teleportLocation);
+        Bukkit.getOnlinePlayers().forEach(p -> Messager.sendMessage(
+            p,
+            Settings.get("messageUnlockedDimension")
+            .replace("<x>", String.valueOf(teleportLocation.getBlockX()))
+            .replace("<z>", String.valueOf(teleportLocation.getBlockZ()))
+        ));
     }
     public static synchronized void standByOrGo(PlayerTeleportEvent e) {
         if (lockedWorlds.isEmpty()) return;
         Location to = Objects.requireNonNull(e.getTo());
         if (!lockedWorlds.contains(Objects.requireNonNull(to.getWorld()).getEnvironment())) return;
         else if (!Objects.requireNonNull(e.getFrom().getWorld()).getEnvironment().equals(World.Environment.NORMAL)) return;
+
+        Location from = e.getFrom().clone();
         to = to.clone();
         e.setCancelled(true);
+
         if (!Objects.requireNonNull(to.getWorld()).getEnvironment().equals(lockedWorlds.getFirst())) return;
         Player player = e.getPlayer();
         if (e.getCause().equals(PlayerTeleportEvent.TeleportCause.END_PORTAL)) reboundEndPortal(e.getFrom(), player);
+
+        if (standByPlayerNames.contains(player.getName())) return;
         standByPlayerNames.add(player.getName());
-        player.sendMessage(Settings.get("messageStartStandByDimension"));
         int needPlayers = Bukkit.getOnlinePlayers().size()*Settings.getInt("dimensionMoveStandByMinPlayersRatio");
-        if (standByPlayerNames.size() >= Bukkit.getOnlinePlayers().size()*Settings.getInt("dimensionMoveStandByMinPlayersRatio")) {
-            unlock(to);
+        if (standByPlayerNames.size() >= needPlayers) {
+            unlock(from, to);
             return;
         }
-        sendMessages(
+        Messager.sendMessageForAllPlayer(
             Settings.get("messageAddedStandByDimensionPlayer")
+            .replace("<player>", player.getName())
             .replace("<playersLen>", String.valueOf(standByPlayerNames.size()))
             .replace("<needPlayersLen>", String.valueOf(needPlayers))
         );
