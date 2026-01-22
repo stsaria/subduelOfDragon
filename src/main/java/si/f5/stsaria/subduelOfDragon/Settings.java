@@ -67,7 +67,7 @@ public class Settings {
         config.addDefault("messageSomeoneInBed", ChatColor.DARK_AQUA+"<player>がベッドに寝ました。<inBedPlayers>/<minInBedPlayers>");
         config.addDefault("messageOkTeleported", ChatColor.GOLD+"テレポートし、リスポーン位置を変更しました！");
         config.addDefault("messageYouDontHaveTellMeOk", ChatColor.RED+"承諾するべき位置はありません。");
-        config.addDefault("messageNewOkTeleportByAdmin", ChatColor.GREEN+"管理者がテレポートとリスポーン位置の固定を求めています！/okで付近にテレポートして、リスポーン位置を固定しましょう！");
+        config.addDefault("messageNewOkTeleportByAdmin", ChatColor.GREEN+"管理者がテレポートとリスポーン位置の固定を求めています！\n/okで付近にテレポートして、リスポーン位置を固定しましょう！");
 
         save();
     }
