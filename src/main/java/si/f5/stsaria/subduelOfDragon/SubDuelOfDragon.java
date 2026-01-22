@@ -50,6 +50,7 @@ public final class SubDuelOfDragon extends JavaPlugin implements Listener {
         Objects.requireNonNull(this.getCommand("getsaves")).setExecutor(new GetSavesCommand());
         Objects.requireNonNull(this.getCommand("savedragon")).setExecutor(new SaveCommand());
         Objects.requireNonNull(this.getCommand("ok")).setExecutor(new OkCommand());
+        Objects.requireNonNull(this.getCommand("setoktp")).setExecutor(new SetOkTpCommand());
         this.getServer().getPluginManager().registerEvents(this, this);
         Bukkit.getScheduler().runTaskLater(this, EnderDragonStrangeManager::updateEnderDragonStrange, 6*20);
 

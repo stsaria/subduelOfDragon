@@ -20,7 +20,7 @@ public class OkTeleportManager {
         else if (okPlayerNames.contains(p.getName())) return false;
         okPlayerNames.add(p.getName());
         p.teleport(teleportLocation);
-        p.setRespawnLocation(teleportLocation);
+        p.setRespawnLocation(teleportLocation, true);
         return true;
     }
 }

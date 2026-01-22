@@ -46,7 +46,8 @@ public class Settings {
         config.addDefault("messageCanceledTeleportHome", ChatColor.RED+"テレポートをキャンセルしました。");
         config.addDefault("messageCantTeleportHome", ChatColor.RED+"テレポートできません。\nテレポート先がまだ選択されていないようです。\n/sethomeで今いる位置に設定できます。");
         config.addDefault("messageAddedStandByDimensionPlayer", ChatColor.GREEN+"<player>が待機列に並びました！　<playersLen>/<needPlayersLen>人");
-        config.addDefault("messageUnlockedDimension", ChatColor.GREEN+"ディメンション開放！\nX座標:<x> Z座標:<z>\n/okでテレポートして、リスポーン位置を固定しましょう！");
+
+        config.addDefault("messageUnlockedDimension", ChatColor.GREEN+"ディメンション開放！\nX座標:<x> Z座標:<z>\n/okで付近にテレポートして、リスポーン位置を固定しましょう！");
         config.addDefault("scoreBoardTitleCommandHelp", "ヘルプ");
         config.addDefault("scoreBoardMessageCommandHelp",
                 """
@@ -61,11 +62,12 @@ public class Settings {
                 して、リスポーン座標を更新する
                 """
         );
-        config.addDefault("actionBarCoord", "X座標:<x> Y座標(高さ):<y> Z座標:<z>");
+        config.addDefault("actionBarCoord", ChatColor.RED+"X座標:<x> "+ChatColor.GREEN+"Y座標(高さ):<y> "+ChatColor.BLUE+"Z座標:<z>");
         config.addDefault("bossBarMessageGoForSleep", "睡眠中");
         config.addDefault("messageSomeoneInBed", ChatColor.DARK_AQUA+"<player>がベッドに寝ました。<inBedPlayers>/<minInBedPlayers>");
         config.addDefault("messageOkTeleported", ChatColor.GOLD+"テレポートし、リスポーン位置を変更しました！");
         config.addDefault("messageYouDontHaveTellMeOk", ChatColor.RED+"承諾するべき位置はありません。");
+        config.addDefault("messageNewOkTeleportByAdmin", ChatColor.GREEN+"管理者がテレポートとリスポーン位置の固定を求めています！/okで付近にテレポートして、リスポーン位置を固定しましょう！");
 
         save();
     }

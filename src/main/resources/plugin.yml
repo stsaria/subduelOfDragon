@@ -33,6 +33,8 @@ commands:
   ok:
     description: OK with teleporting there and setting the spawn point
     permission: subduer
+  setoktp:
+    description: Set new OKTP
 permissions:
   subduer:
     description: Subduer of Dragon
