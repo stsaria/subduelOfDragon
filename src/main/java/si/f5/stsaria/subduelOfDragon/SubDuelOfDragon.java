@@ -75,6 +75,10 @@ public final class SubDuelOfDragon extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        p.teleport(OkTeleportManager.getTeleportLocation());
+        p.setRespawnLocation(OkTeleportManager.getTeleportLocation(), true);
+
         HelpScoreBoard.show(e.getPlayer());
         EnderDragonStrangeManager.updateEnderDragonStrange();
     }

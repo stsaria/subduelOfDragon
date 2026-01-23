@@ -15,6 +15,10 @@ public class OkTeleportManager {
         okPlayerNames.clear();
     }
 
+    public synchronized static Location getTeleportLocation() {
+        return teleportLocation;
+    }
+
     public synchronized static boolean ok(Player p) {
         if (teleportLocation == null) return false;
         else if (okPlayerNames.contains(p.getName())) return false;
