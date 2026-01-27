@@ -22,10 +22,14 @@ public class HomeCommand implements CommandExecutor {
             return true;
         }
         HomesManager.startTeleportStandBy(player);
-        player.sendMessage(Settings.get("messageStartedTeleport"));
+        Integer delay = Settings.getInt("homeStandByDelay");
+        player.sendMessage(
+            Settings.get("messageStartedTeleport")
+            .replace("<cooldown>", String.valueOf(delay))
+        );
         new Thread(() -> {
             float loopDelay = 0.1F;
-            for (int i = 0; i < ((float) Settings.getInt("homeStandByDelay"))/loopDelay; i++) {
+            for (int i = 0; i < ((float) delay)/loopDelay; i++) {
                 if (!HomesManager.isStartedTeleportStandBy(player)) {
                     player.sendMessage(Settings.get("messageCanceledTeleportHome"));
                     return;
