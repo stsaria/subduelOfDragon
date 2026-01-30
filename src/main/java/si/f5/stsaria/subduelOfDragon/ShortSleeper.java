@@ -1,6 +1,7 @@
 package si.f5.stsaria.subduelOfDragon;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import si.f5.stsaria.subduelOfDragon.util.Messager;
+import si.f5.stsaria.subduelOfDragon.util.Worlder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +19,9 @@ public class ShortSleeper {
     public static synchronized void bedIn(PlayerBedEnterEvent e) {
         int players = Bukkit.getOnlinePlayers().size();
         int minPlayersRatio = Settings.getInt("sleepMinPlayersRatio");
+        if (Worlder.getWorldByEnvironment(World.Environment.NORMAL).getTime() < 13800){
+            return;
+        }
 
         bedInPlayerNames.add(e.getPlayer().getName());
         if (players >= minPlayersRatio){

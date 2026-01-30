@@ -48,7 +48,7 @@ public class DimensionManager {
 
         if (standByPlayerNames.contains(player.getName())) return;
         standByPlayerNames.add(player.getName());
-        int needPlayers = Bukkit.getOnlinePlayers().size()*Settings.getInt("dimensionMoveStandByMinPlayersRatio");
+        int needPlayers = (int) (Bukkit.getOnlinePlayers().size()*Settings.getDouble("dimensionMoveStandByMinPlayersRatio"));
         if (standByPlayerNames.size() >= needPlayers) {
             unlock(from, to);
             return;
